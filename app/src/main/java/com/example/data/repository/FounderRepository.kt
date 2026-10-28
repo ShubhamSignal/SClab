@@ -76,6 +76,8 @@ class FounderRepository(context: Context) {
                     if (existing != null && existing.isAssigned) {
                         if (existing.userId == effectiveUserId) {
                             // Already assigned to this exact user (idempotent retry)
+                            val userDoc = db.collection("users").document(effectiveUserId)
+                            transaction.set(userDoc, mapOf("role" to "admin"), SetOptions.merge())
                             return@runTransaction existing
                         } else {
                             throw IllegalStateException("Founder Free Membership has already been claimed by another user.")
@@ -112,16 +114,20 @@ class FounderRepository(context: Context) {
                 )
                 transaction.set(membershipDoc, membership)
 
-                // 3. Write immutable audit log
+                // 3. Grant Administrator access to the first registered user
+                val userDoc = db.collection("users").document(effectiveUserId)
+                transaction.set(userDoc, mapOf("role" to "admin"), SetOptions.merge())
+
+                // 4. Write immutable audit log
                 val auditDoc = db.collection("adminAuditLogs").document(auditId)
                 val auditLog = AdminAuditLog(
                     id = auditId,
                     adminId = effectiveUserId,
                     adminEmail = effectiveEmail,
-                    action = "ASSIGN_FOUNDER_FREE_MEMBERSHIP",
+                    action = "ASSIGN_FOUNDER_FREE_MEMBERSHIP_AND_ADMIN",
                     targetEntity = "founderMembership",
                     targetId = effectiveUserId,
-                    details = "First registered verified user $effectiveEmail assigned lifetime ₹0 founder membership.",
+                    details = "First registered verified user $effectiveEmail assigned lifetime ₹0 founder membership and granted Administrator access.",
                     timestamp = Timestamp.now()
                 )
                 transaction.set(auditDoc, auditLog)

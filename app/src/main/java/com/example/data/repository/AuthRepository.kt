@@ -131,7 +131,8 @@ class AuthRepository(private val context: Context) {
         fullName: String,
         gender: String,
         dob: String,
-        termsAccepted: Boolean
+        termsAccepted: Boolean,
+        role: String = "user"
     ): Result<UserData> {
         val user = auth.currentUser ?: return Result.failure(IllegalStateException("Not authenticated"))
         if (!termsAccepted) return Result.failure(IllegalArgumentException("You must accept Terms of Service"))
@@ -144,7 +145,7 @@ class AuthRepository(private val context: Context) {
             email = user.email ?: "",
             gender = gender,
             dob = dob,
-            role = "user",
+            role = role,
             isEmailVerified = user.isEmailVerified,
             isSuspended = false,
             isDeleted = false,

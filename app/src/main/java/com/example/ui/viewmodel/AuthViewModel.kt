@@ -85,10 +85,15 @@ class AuthViewModel(
     ) {
         viewModelScope.launch {
             _uiState.value = AuthUiState.Loading
-            val regResult = authRepository.registerUserProfile(fullName, gender, dob, termsAccepted)
+            // Check if this is the first registered user to award Founder & Admin access
+            val preCheck = founderRepository.checkFounderStatus(authRepository.currentUserId())
+            val isFirstUser = preCheck is FounderCheckResult.AvailableForFirstUser || preCheck is FounderCheckResult.CurrentUserIsFounder
+            val initialRole = if (isFirstUser) "admin" else "user"
+
+            val regResult = authRepository.registerUserProfile(fullName, gender, dob, termsAccepted, role = initialRole)
             regResult.onSuccess { userData ->
                 userRepository.syncPublicProfile(userData)
-                // Check if user is eligible for First Registered User Lifetime Free Membership!
+                // Check if user is eligible for First Registered User Lifetime Free Membership and Admin access!
                 val founderStatus = founderRepository.checkFounderStatus(userData.userId)
                 var wasAssignedFounder = false
                 if (founderStatus is FounderCheckResult.AvailableForFirstUser) {

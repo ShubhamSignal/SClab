@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AdminPanelSettings
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.filled.Diamond
@@ -74,6 +75,7 @@ fun ProfileScreen(
     homeViewModel: HomeViewModel,
     authViewModel: AuthViewModel,
     onOpenLegalPolicy: (title: String, content: String) -> Unit,
+    onNavigateToAdmin: () -> Unit = {},
     onSignOut: () -> Unit
 ) {
     val user by homeViewModel.currentUserData.collectAsState()
@@ -81,6 +83,7 @@ fun ProfileScreen(
     var showDeleteDialog by remember { mutableStateOf(false) }
 
     val isFounderFree = membership?.tier == "FOUNDER_FREE"
+    val isAdmin = user?.role == "admin"
 
     Scaffold(
         containerColor = DarkBackground,
@@ -166,6 +169,14 @@ fun ProfileScreen(
                             badgeColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
+
+                    if (isAdmin) {
+                        Spacer(modifier = Modifier.height(6.dp))
+                        StatusBadge(
+                            text = "Administrator Access",
+                            badgeColor = AccentCyan
+                        )
+                    }
                 }
             }
 
@@ -180,11 +191,29 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(10.dp))
             GlassCard {
                 Column {
+                    DetailRow(label = "Platform Role", value = if (isAdmin) "Administrator" else "Member")
                     DetailRow(label = "Gender", value = user?.gender ?: "Not specified")
                     DetailRow(label = "Date of Birth", value = user?.dob ?: "Not specified")
                     DetailRow(label = "Account Status", value = if (user?.isSuspended == true) "Suspended" else "Active & Verified")
                     DetailRow(label = "Call Earning Rate", value = "₹${(membership?.earningRatePaisePer15s ?: 400L) / 100} / 15-sec")
                 }
+            }
+
+            // Administration Card (Visible to administrators inside the app)
+            if (isAdmin) {
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = "Administration",
+                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                ProfileMenuItem(
+                    title = "Admin Panel",
+                    icon = Icons.Default.AdminPanelSettings,
+                    textColor = AccentCyan,
+                    onClick = onNavigateToAdmin
+                )
             }
 
             Spacer(modifier = Modifier.height(24.dp))

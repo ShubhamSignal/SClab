@@ -178,7 +178,6 @@ fun SClabApp() {
                 LoginScreen(
                     authViewModel = authViewModel,
                     onNavigateToRegister = { currentScreen = AppScreen.REGISTER },
-                    onNavigateToAdminLogin = { currentScreen = AppScreen.ADMIN_LOGIN },
                     onLoginSuccess = {
                         currentScreen = AppScreen.MEMBERSHIP
                     }
@@ -364,6 +363,10 @@ fun SClabApp() {
                                         legalContent = content
                                         currentScreen = AppScreen.LEGAL_POLICY
                                     },
+                                    onNavigateToAdmin = {
+                                        adminViewModel.authorizeAdminUser()
+                                        currentScreen = AppScreen.ADMIN_DASHBOARD
+                                    },
                                     onSignOut = { currentScreen = AppScreen.LOGIN }
                                 )
                             }
@@ -427,11 +430,11 @@ fun SClabApp() {
             }
 
             AppScreen.ADMIN_LOGIN -> {
-                BackHandler { currentScreen = AppScreen.LOGIN }
+                BackHandler { currentScreen = AppScreen.MAIN_TABS }
                 AdminLoginScreen(
                     adminViewModel = adminViewModel,
                     onLoginSuccess = { currentScreen = AppScreen.ADMIN_DASHBOARD },
-                    onBack = { currentScreen = AppScreen.LOGIN }
+                    onBack = { currentScreen = AppScreen.MAIN_TABS }
                 )
             }
 

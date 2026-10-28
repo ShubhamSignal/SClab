@@ -144,7 +144,6 @@ fun SplashScreen(
 fun LoginScreen(
     authViewModel: AuthViewModel,
     onNavigateToRegister: () -> Unit,
-    onNavigateToAdminLogin: () -> Unit,
     onLoginSuccess: () -> Unit
 ) {
     val context = LocalContext.current
@@ -172,29 +171,6 @@ fun LoginScreen(
                 .padding(horizontal = 24.dp, vertical = 32.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                TextButton(
-                    onClick = onNavigateToAdminLogin,
-                    modifier = Modifier.testTag("admin_portal_button")
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.AdminPanelSettings,
-                        contentDescription = "Admin",
-                        tint = AccentCyan,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Spacer(modifier = Modifier.width(4.dp))
-                    Text(
-                        text = "Admin Portal",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = AccentCyan
-                    )
-                }
-            }
-
             Spacer(modifier = Modifier.height(16.dp))
 
             // Logo & Title
@@ -425,7 +401,7 @@ fun RegisterScreen(
                         }
                         Spacer(modifier = Modifier.height(4.dp))
                         Text(
-                            text = "First registered verified user receives Founder Lifetime Free Membership (₹0).",
+                            text = "First registered verified user receives Founder Lifetime Free Membership (₹0) and Administrator Access.",
                             style = MaterialTheme.typography.bodySmall,
                             color = Color.White
                         )
