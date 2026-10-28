@@ -1,0 +1,185 @@
+{
+  "title": "SClab Communication and Membership Platform Schema",
+  "description": "Firestore blueprint schema for SClab real-time communication, founder free membership, calls, ledger and wallet",
+  "entities": {
+    "users": {
+      "collection": "users",
+      "path": "users/{userId}",
+      "fields": {
+        "userId": { "type": "string" },
+        "fullName": { "type": "string" },
+        "email": { "type": "string" },
+        "gender": { "type": "string" },
+        "dob": { "type": "string" },
+        "role": { "type": "string" },
+        "isEmailVerified": { "type": "boolean" },
+        "isSuspended": { "type": "boolean" },
+        "isDeleted": { "type": "boolean" },
+        "createdAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      }
+    },
+    "publicProfiles": {
+      "collection": "publicProfiles",
+      "path": "publicProfiles/{userId}",
+      "fields": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "gender": { "type": "string" },
+        "age": { "type": "number" },
+        "avatarUrl": { "type": "string" },
+        "isOnline": { "type": "boolean" },
+        "bio": { "type": "string" },
+        "updatedAt": { "type": "timestamp" }
+      }
+    },
+    "founderMembership": {
+      "collection": "founderMembership",
+      "path": "founderMembership/{docId}",
+      "fields": {
+        "isAssigned": { "type": "boolean" },
+        "userId": { "type": "string" },
+        "userEmail": { "type": "string" },
+        "assignedAt": { "type": "timestamp" },
+        "earningRatePaisePer15s": { "type": "number" },
+        "auditEventId": { "type": "string" }
+      }
+    },
+    "memberships": {
+      "collection": "memberships",
+      "path": "memberships/{userId}",
+      "fields": {
+        "userId": { "type": "string" },
+        "tier": { "type": "string" },
+        "pricePaidPaise": { "type": "number" },
+        "earningRatePaisePer15s": { "type": "number" },
+        "status": { "type": "string" },
+        "activatedAt": { "type": "timestamp" },
+        "paymentOrderId": { "type": "string" }
+      }
+    },
+    "conversations": {
+      "collection": "conversations",
+      "path": "conversations/{conversationId}",
+      "fields": {
+        "participantIds": { "type": "array" },
+        "lastMessageText": { "type": "string" },
+        "lastSenderId": { "type": "string" },
+        "lastMessageAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      }
+    },
+    "messages": {
+      "collection": "messages",
+      "path": "conversations/{conversationId}/messages/{messageId}",
+      "fields": {
+        "conversationId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "text": { "type": "string" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      }
+    },
+    "calls": {
+      "collection": "calls",
+      "path": "calls/{callId}",
+      "fields": {
+        "callerId": { "type": "string" },
+        "receiverId": { "type": "string" },
+        "callType": { "type": "string" },
+        "status": { "type": "string" },
+        "channelName": { "type": "string" },
+        "startedAt": { "type": "timestamp" },
+        "connectedAt": { "type": "timestamp" },
+        "endedAt": { "type": "timestamp" },
+        "durationSeconds": { "type": "number" },
+        "sdpOffer": { "type": "string" },
+        "sdpAnswer": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      }
+    },
+    "earningLedger": {
+      "collection": "earningLedger",
+      "path": "earningLedger/{transactionId}",
+      "fields": {
+        "userId": { "type": "string" },
+        "callId": { "type": "string" },
+        "qualifyingIntervals": { "type": "number" },
+        "ratePaisePerInterval": { "type": "number" },
+        "amountPaise": { "type": "number" },
+        "status": { "type": "string" },
+        "timestamp": { "type": "timestamp" }
+      }
+    },
+    "wallets": {
+      "collection": "wallets",
+      "path": "wallets/{userId}",
+      "fields": {
+        "userId": { "type": "string" },
+        "availableBalancePaise": { "type": "number" },
+        "pendingEarningsPaise": { "type": "number" },
+        "lifetimeEarningsPaise": { "type": "number" },
+        "totalWithdrawnPaise": { "type": "number" },
+        "updatedAt": { "type": "timestamp" }
+      }
+    },
+    "bankAccounts": {
+      "collection": "bankAccounts",
+      "path": "bankAccounts/{userId}",
+      "fields": {
+        "userId": { "type": "string" },
+        "accountHolderName": { "type": "string" },
+        "bankName": { "type": "string" },
+        "accountNumberMasked": { "type": "string" },
+        "ifscCode": { "type": "string" },
+        "status": { "type": "string" },
+        "submittedAt": { "type": "timestamp" },
+        "updatedAt": { "type": "timestamp" }
+      }
+    },
+    "withdrawalRequests": {
+      "collection": "withdrawalRequests",
+      "path": "withdrawalRequests/{requestId}",
+      "fields": {
+        "userId": { "type": "string" },
+        "amountPaise": { "type": "number" },
+        "status": { "type": "string" },
+        "bankDetailsSnapshot": { "type": "string" },
+        "requestedAt": { "type": "timestamp" },
+        "processedAt": { "type": "timestamp" }
+      }
+    },
+    "userReports": {
+      "collection": "userReports",
+      "path": "userReports/{reportId}",
+      "fields": {
+        "reporterId": { "type": "string" },
+        "reportedUserId": { "type": "string" },
+        "reason": { "type": "string" },
+        "details": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      }
+    },
+    "blocks": {
+      "collection": "blocks",
+      "path": "blocks/{blockId}",
+      "fields": {
+        "blockerId": { "type": "string" },
+        "blockedUserId": { "type": "string" },
+        "createdAt": { "type": "timestamp" }
+      }
+    },
+    "adminAuditLogs": {
+      "collection": "adminAuditLogs",
+      "path": "adminAuditLogs/{logId}",
+      "fields": {
+        "adminId": { "type": "string" },
+        "action": { "type": "string" },
+        "targetEntity": { "type": "string" },
+        "targetId": { "type": "string" },
+        "timestamp": { "type": "timestamp" },
+        "details": { "type": "string" }
+      }
+    }
+  }
+}

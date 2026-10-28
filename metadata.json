@@ -1,0 +1,6 @@
+{
+  "name": "SClab",
+  "description": "Production communication app with audio/video calls, real-time messaging, wallet and founder lifetime free membership",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
