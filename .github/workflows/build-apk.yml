@@ -17,11 +17,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Java 17
+      - name: Set up Java 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
 
       - name: Verify Java environment
         run: |
@@ -36,7 +36,7 @@ jobs:
             echo "::error::Java version must be at least 17, but detected '$JAVA_MAJOR' from '$JAVA_VER_STRING'"
             exit 1
           fi
-          echo "Java 17+ environment verified successfully."
+          echo "Java 17+ (Java $JAVA_MAJOR) environment verified successfully."
 
       - name: Set up Gradle 9.3.1
         uses: gradle/actions/setup-gradle@v4
